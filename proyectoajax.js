@@ -1,17 +1,18 @@
 function buscarPelicula() {
     $('#botonBuscar').click(function () {
-        console.log('antes de ajax')
         $.ajax({
             url: "http://www.omdbapi.com/?s=" + $("#inputPelicula").val() + "&apikey=31b14819",
             type: "get",
             dataType: "json",
             success: function (result) {
-                addPelicula(result);
-                console.log(result)
+                if (result.Response === 'True'){
+                    addPelicula(result);
+                } else {
+                    noEncontrado(result, $('#inputPelicula'))
+                }
             },
-            error: function (nopelicula) {
-                noEncontrado(nopelicula);
-                console.log('no existe ompare', nopelicula)
+            error: function (result) {
+                noEncontrado(result, $('#inputPelicula'));
             }
 
         });
@@ -20,8 +21,10 @@ function buscarPelicula() {
 
 };
 
-function noEncontrado(nopelicula) {
-    console.log('no encontrado', nopelicula)
+function noEncontrado(nopelicula, nombre) {
+    $('#contenido').empty()
+    $('#contenido').append(nopelicula.Error, '<p>No hemos podido encontrar resultados para</p>',nombre.val());
+
 }
 
 function addPelicula(pelicula) {
