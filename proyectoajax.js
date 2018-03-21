@@ -1,9 +1,8 @@
 function buscarPelicula() {
+    console.log('antes de ajax');
     $('#botonBuscar').click(function () {
         $.ajax({
             url: "http://www.omdbapi.com/?s=" + $("#inputPelicula").val() + "&apikey=31b14819",
-            type: "get",
-            dataType: "json",
             success: function (result) {
                 if (result.Response === 'True'){
                     addPelicula(result);
@@ -27,6 +26,10 @@ function noEncontrado(nopelicula, nombre) {
 
 }
 
+function buscarDetalle(idPelicula) {
+    console.log('ID de la película: ', idPelicula.val())
+}
+
 function addPelicula(pelicula) {
     $('#contenido').empty()
     $('#contenido').append('<p>Mostrando resultados </p>');
@@ -36,8 +39,8 @@ function addPelicula(pelicula) {
             '  <img class="card-img-top" src="' + pelicula['Search'][i].Poster + '" alt="Portada no cargada!">\n' +
             '  <div class="card-body">\n' +
             '    <h5 class="card-title">' + pelicula['Search'][i].Title + '</h5>\n' +
-            '    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p>\n' +
-            '    <a href="#" class="btn btn-primary">Go somewhere</a>\n' +
+            '    <p class="card-text">'+pelicula['Search'][i].Year+'</p>\n' +
+            '    <a href="#" class="btn btn-primary" onclick="'+pelicula['Search'][i].imdbID+'">Ver detalle</a>\n' +
             '  </div>\n' +
             '</div>')
 
