@@ -57,6 +57,62 @@ function noEncontrado(nopelicula, nombre) {
 }
 
 function buscarDetalle(idPelicula) {
+    $.ajax({
+        url:"http://www.omdbapi.com/?i=" + idPelicula + "&apikey=31b14819",
+        success: function (detalle) {
+            $('#contenido').empty();
+            $('#contenido').append('<div class="col-lg-6 col-md-6 col-sm-6" id="accordion">\n' +
+                '  <div class="card">\n' +
+                '    <div class="card-header" id="headingOne">\n' +
+                '      <h5 class="mb-0">\n' +
+                '        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">\n' +
+                '          Descripción: \n' +
+                '        </button>\n' +
+                '      </h5>\n' +
+                '    </div>\n' +
+                '\n' +
+                '    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">\n' +
+                '      <div class="card-body">\n' +
+                '        '+ detalle.Plot +'\n' +
+                '      </div>\n' +
+                '    </div>\n' +
+                '  </div>\n' +
+                '  <div class="card">\n' +
+                '    <div class="card-header" id="headingTwo">\n' +
+                '      <h5 class="mb-0">\n' +
+                '        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">\n' +
+                '          Collapsible Group Item #2\n' +
+                '        </button>\n' +
+                '      </h5>\n' +
+                '    </div>\n' +
+                '    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">\n' +
+                '      <div class="card-body">\n' +
+                '        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.\n' +
+                '      </div>\n' +
+                '    </div>\n' +
+                '  </div>\n' +
+                '  <div class="card">\n' +
+                '    <div class="card-header" id="headingThree">\n' +
+                '      <h5 class="mb-0">\n' +
+                '        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">\n' +
+                '          Collapsible Group Item #3\n' +
+                '        </button>\n' +
+                '      </h5>\n' +
+                '    </div>\n' +
+                '    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">\n' +
+                '      <div class="card-body">\n' +
+                '        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.\n' +
+                '      </div>\n' +
+                '    </div>\n' +
+                '  </div>\n' +
+                '</div>');
+            console.log('Este es el detalle',detalle)
+        },
+        error: function (nodetalle) {
+            console.log('Error desde el detalle', detalle);
+            noEncontrado(nodetalle)
+        }
+    })
     console.log('ID de la película: ', idPelicula);
 }
 
