@@ -1,3 +1,5 @@
+var win = $(window);
+
 function llevarInicio() {
     $('#contenido').empty();
     $('#contenido').append('<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">\n' +
@@ -28,11 +30,13 @@ function llevarInicio() {
         '    </div>')
 }
 
+/*################ BUSCAR PELICULAS POR NOMBRE ######################*/
+
 function buscarPelicula() {
     console.log('antes de ajax');
     $('#botonBuscar').click(function () {
         $.ajax({
-            url: "http://www.omdbapi.com/?s=" + $("#inputPelicula").val() + "&plot=short&type=movie&apikey=31b14819",
+            url: "http://www.omdbapi.com/?s=" + $("#inputPelicula").val() + "&type=movie&apikey=31b14819",
             success: function (result) {
                 if (result.Response === 'True') {
                     addPelicula(result);
@@ -46,7 +50,7 @@ function buscarPelicula() {
 
         });
         // $("#inputPelicula").val('');
-    })
+    });
 
 };
 
@@ -55,6 +59,8 @@ function noEncontrado(nopelicula, nombre) {
     $('#contenido').append(nopelicula.Error, '<hr><a>No hemos podido encontrar resultados para: <h1 style="display: inline-block;">'+nombre.val()+' </h1></a><hr>');
 
 }
+
+/*############## BUSCAR DETALLE DE PELICULA POR ID #######################*/
 
 function buscarDetalle(idPelicula) {
     $.ajax({
@@ -118,7 +124,7 @@ function buscarDetalle(idPelicula) {
 
 function addPelicula(pelicula) {
     console.log(pelicula);
-    $('#contenido').empty();
+    // $('#contenido').empty();
     $('#contenido').append('<a style="text-align: center">Mostrando resultados para <h1 style="display:inline-block;">' + $('#inputPelicula').val() + '</h1></a><hr>');
 
     for (let i = 0; i < pelicula['Search'].length; i++) {
@@ -131,8 +137,26 @@ function addPelicula(pelicula) {
             '  </div>\n' +
             '</div>')
     }
+    /*################# SCROLL INFINITO ########################*/
+    win.scroll(function() {
+        if ($(document).height() - win.height() <= (win.scrollTop() +80)) {
+
+            // $('#loading').show();
+
+            $.ajax({
+                url: "http://www.omdbapi.com/?s=" + $("#inputPelicula").val() + "&type=movie&page=2&apikey=31b14819",
+                success: function(denuevo) {
+                    addPelicula(denuevo);
+
+                    // $('#loading').hide();
+                }
+            });
+        }
+    });
 }
 
 $(document).ready(function () {
     buscarPelicula();
+
+
 });
