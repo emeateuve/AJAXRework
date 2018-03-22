@@ -58,7 +58,7 @@ function noEncontrado(nopelicula, nombre) {
 
 function buscarDetalle(idPelicula) {
     $.ajax({
-        url:"http://www.omdbapi.com/?i=" + idPelicula + "&apikey=31b14819",
+        url:"http://www.omdbapi.com/?i=" + idPelicula + "&plot=full&apikey=31b14819",
         success: function (detalle) {
             $('#contenido').empty();
             $('#contenido').append('<div class="col-lg-6 col-md-6 col-sm-6" id="accordion">\n' +
