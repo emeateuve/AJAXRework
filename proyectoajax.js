@@ -125,6 +125,10 @@ function buscarDetalle(idPelicula) {
     console.log('ID de la película: ', idPelicula);
 }
 
+function noCargada(pelicula) {
+    pelicula.src = "./img/notavailable.jpg"
+}
+
 function addPelicula(pelicula) {
     console.log('añade pelicula')
     console.log(pelicula);
@@ -133,7 +137,7 @@ function addPelicula(pelicula) {
 
     for (let i = 0; i < pelicula['Search'].length; i++) {
         $('#contenido').append('<div class="card" style="width: 18rem; display: inline-block;">\n' +
-            '  <img class="card-img-top" src="' + pelicula['Search'][i].Poster + '" alt='+ $('#noDisponible') +'>\n' +
+            '  <img class="card-img-top" src="' + pelicula['Search'][i].Poster + '" onerror="noCargada(this)">\n' +
             '  <div class="card-body">\n' +
             '    <h5 class="card-title">' + pelicula['Search'][i].Title + '</h5>\n' +
             '    <p class="card-text">' + pelicula['Search'][i].Year + '</p>\n' +
