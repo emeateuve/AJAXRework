@@ -1,9 +1,11 @@
 var win = $(window);
 var hayPeticion = true;
+var hayTitulo = false;
 var contadorPagina = 1;
-var noDisponible = $('<img src="./img/notavailable.jpg"/>');
+// var noDisponible = $('<img src="./img/notavailable.jpg"/>');
 
 function llevarInicio() {
+    $('#inputPelicula').val(null);
     $('#contenido').empty();
     $('#contenido').append('<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">\n' +
         '        <ol class="carousel-indicators">\n' +
@@ -36,13 +38,16 @@ function llevarInicio() {
 /*################ BUSCAR PELICULAS POR NOMBRE ######################*/
 
 function buscarPelicula() {
-
     $('#botonBuscar').click(function () {
+        $('#contenido').empty();
+        contadorPagina = 1;
         $.ajax({
             url: "http://www.omdbapi.com/?s=" + $("#inputPelicula").val() + "&type=movie&apikey=31b14819",
             success: function (result) {
                 if (result.Response === 'True') {
+                    hayTitulo = true;
                     addPelicula(result);
+
                 } else {
                     noEncontrado(result, $('#inputPelicula'))
                 }
@@ -69,7 +74,9 @@ function buscarDetalle(idPelicula) {
     $.ajax({
         url: "http://www.omdbapi.com/?i=" + idPelicula + "&plot=full&apikey=31b14819",
         success: function (detalle) {
+            $('#inputPelicula').val(null);
             $('#contenido').empty();
+
             $('#contenido').append('<div class="col-lg-6 col-md-6 col-sm-6" id="accordion">\n' +
                 '  <div class="card">\n' +
                 '    <div class="card-header" id="headingOne">\n' +
@@ -133,8 +140,10 @@ function addPelicula(pelicula) {
     console.log('añade pelicula')
     console.log(pelicula);
     // $('#contenido').empty();
-    $('#contenido').append('<a style="text-align: center">Mostrando resultados para <h1 style="display:inline-block;">' + $('#inputPelicula').val() + '</h1></a><hr>');
-
+    if (hayTitulo === true){
+        $('#contenido').append('<a style="text-align: center">Mostrando resultados para <h1 style="display:inline-block;">' + $('#inputPelicula').val() + '</h1></a><hr>');
+    }
+    hayTitulo = false;
     for (let i = 0; i < pelicula['Search'].length; i++) {
         $('#contenido').append('<div class="card" style="width: 18rem; display: inline-block;">\n' +
             '  <img class="card-img-top" src="' + pelicula['Search'][i].Poster + '" onerror="noCargada(this)">\n' +
@@ -147,7 +156,7 @@ function addPelicula(pelicula) {
     }
     /*################# SCROLL INFINITO ########################*/
     win.scroll(function () {
-        if ($(document).height() - win.height() <= (win.scrollTop() + 80) && hayPeticion === true) {
+        if ($(document).height() - win.height() <= (win.scrollTop() + 80) && hayPeticion === true && $("#inputPelicula").val() != '') {
             contadorPagina++;
             hayPeticion = false;
             $.ajax({
