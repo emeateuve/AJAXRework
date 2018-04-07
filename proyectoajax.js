@@ -71,7 +71,7 @@ function buscarPelicula() {
 function noEncontrado(nopelicula, nombre) {
     $('#contenido').empty();
     $('#contenido').append(nopelicula.Error, '<hr><a>No hemos podido encontrar resultados para: <h1 style="display: inline-block;">' + nombre + ' </h1></a><hr>');
-
+    $('#contenido').append('<hr><a class="btn btn-warning col-6 offset-3" onclick="llevarInicio()" style="color: #000;">Volver al inicio</a>')
 }
 
 /*############## BUSCAR DETALLE DE PELICULA POR ID #######################*/
@@ -128,6 +128,7 @@ function buscarDetalle(idPelicula) {
                 '    </div>\n' +
                 '  </div>\n' +
                 '</div>');
+            $('#contenido').append('<hr><a class="btn btn-warning col-6 offset-3" onclick="llevarInicio()">Volver al inicio</a>')
             console.log('Este es el detalle', detalle)
         },
         error: function (nodetalle) {
@@ -154,7 +155,7 @@ function addPelicula(pelicula) {
         $('#contenido').append('<div class="card col-lg-3 col-md-4 col-sm-6 col-xs-12 col-12" style="height: 500px; display: inline-flex;">\n' +
             '  <img class="card-img-top" style="height: 300px; width: 100%;" src="' + pelicula['Search'][i].Poster + '" onerror="noCargada(this)">\n' +
             '  <div class="card-body">\n' +
-            '    <a class="card-title" href="#" onclick="buscarDetalle(\''+ pelicula['Search'][i].imdbID +'\')">' + pelicula['Search'][i].Title + '</a>\n' +
+            '    <a class="card-title" href="#" onclick="buscarDetalle(\'' + pelicula['Search'][i].imdbID + '\')">' + pelicula['Search'][i].Title + '</a>\n' +
             '    <p class="card-text">Año: ' + pelicula['Search'][i].Year + '</p>\n' +
             '    <p class="btn btn-primary col-6 offset-3" style="color: white" onclick="buscarDetalle(\'' + pelicula['Search'][i].imdbID + '\')">Ver detalle</p>\n' +
             '  </div>\n' +
