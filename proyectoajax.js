@@ -2,9 +2,12 @@ var win = $(window);
 var hayPeticion = true;
 var hayTitulo = false;
 var contadorPagina = 1;
+var peliculaBuscada = ''
+
 // var noDisponible = $('<img src="./img/notavailable.jpg"/>');
 
 function llevarInicio() {
+    peliculaBuscada = ''
     $('#inputPelicula').val(null);
     $('#contenido').empty();
     $('#contenido').append('<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">\n' +
@@ -40,31 +43,34 @@ function llevarInicio() {
 function buscarPelicula() {
     $('#botonBuscar').click(function () {
         $('#contenido').empty();
+        peliculaBuscada = $('#inputPelicula').val();
+        console.log('La palabra es: ', peliculaBuscada)
         contadorPagina = 1;
         $.ajax({
-            url: "http://www.omdbapi.com/?s=" + $("#inputPelicula").val() + "&type=movie&apikey=31b14819",
+            url: "http://www.omdbapi.com/?s=" + peliculaBuscada + "&type=movie&apikey=31b14819",
             success: function (result) {
                 if (result.Response === 'True') {
                     hayTitulo = true;
                     addPelicula(result);
 
                 } else {
-                    noEncontrado(result, $('#inputPelicula'))
+                    noEncontrado(result, peliculaBuscada)
                 }
             },
             error: function (result) {
-                noEncontrado(result, $('#inputPelicula'));
+                noEncontrado(result, peliculaBuscada);
             }
 
         });
         // $("#inputPelicula").val('');
     });
 
+
 };
 
 function noEncontrado(nopelicula, nombre) {
     $('#contenido').empty();
-    $('#contenido').append(nopelicula.Error, '<hr><a>No hemos podido encontrar resultados para: <h1 style="display: inline-block;">' + nombre.val() + ' </h1></a><hr>');
+    $('#contenido').append(nopelicula.Error, '<hr><a>No hemos podido encontrar resultados para: <h1 style="display: inline-block;">' + nombre + ' </h1></a><hr>');
 
 }
 
@@ -140,27 +146,27 @@ function addPelicula(pelicula) {
     console.log('añade pelicula')
     console.log(pelicula);
     // $('#contenido').empty();
-    if (hayTitulo === true){
-        $('#contenido').append('<a style="text-align: center">Mostrando resultados para <h1 style="display:inline-block;">' + $('#inputPelicula').val() + '</h1></a><hr>');
+    if (hayTitulo === true) {
+        $('#contenido').append('<a style="text-align: center">Mostrando resultados para <h1 style="display:inline-block;">' + peliculaBuscada + '</h1></a><hr>');
     }
     hayTitulo = false;
     for (let i = 0; i < pelicula['Search'].length; i++) {
-        $('#contenido').append('<div class="card" style="width: 18rem; display: inline-block;">\n' +
-            '  <img class="card-img-top" src="' + pelicula['Search'][i].Poster + '" onerror="noCargada(this)">\n' +
+        $('#contenido').append('<div class="card col-lg-3 col-md-4 col-sm-6 col-xs-12 col-12" style="height: 500px; display: inline-flex;">\n' +
+            '  <img class="card-img-top" style="height: 300px; width: 100%;" src="' + pelicula['Search'][i].Poster + '" onerror="noCargada(this)">\n' +
             '  <div class="card-body">\n' +
-            '    <h5 class="card-title">' + pelicula['Search'][i].Title + '</h5>\n' +
-            '    <p class="card-text">' + pelicula['Search'][i].Year + '</p>\n' +
-            '    <a class="btn btn-primary" onclick="buscarDetalle(\'' + pelicula['Search'][i].imdbID + '\')">Ver detalle</a>\n' +
+            '    <a class="card-title" href="#" onclick="buscarDetalle(\''+ pelicula['Search'][i].imdbID +'\')">' + pelicula['Search'][i].Title + '</a>\n' +
+            '    <p class="card-text">Año: ' + pelicula['Search'][i].Year + '</p>\n' +
+            '    <p class="btn btn-primary col-6 offset-3" style="color: white" onclick="buscarDetalle(\'' + pelicula['Search'][i].imdbID + '\')">Ver detalle</p>\n' +
             '  </div>\n' +
             '</div>')
     }
     /*################# SCROLL INFINITO ########################*/
     win.scroll(function () {
-        if ($(document).height() - win.height() <= (win.scrollTop() + 80) && hayPeticion === true && $("#inputPelicula").val() != '') {
+        if ($(document).height() - win.height() <= (win.scrollTop() + 80) && hayPeticion === true && peliculaBuscada != '') {
             contadorPagina++;
             hayPeticion = false;
             $.ajax({
-                url: "http://www.omdbapi.com/?s=" + $("#inputPelicula").val() + "&type=movie&page=" + contadorPagina + "&apikey=31b14819",
+                url: "http://www.omdbapi.com/?s=" + peliculaBuscada + "&type=movie&page=" + contadorPagina + "&apikey=31b14819",
                 success: function (denuevo) {
                     addPelicula(denuevo);
                     hayPeticion = true;
