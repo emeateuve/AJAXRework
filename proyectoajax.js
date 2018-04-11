@@ -88,8 +88,11 @@ function buscarDetalle(idPelicula) {
             $('#contenido').empty();
 
             /*----- Descripción -----*/
+            $('#contenido').append('<div class="row">');
 
-            $('#contenido').append('<div><div class="col-lg-6 col-md-6 col-sm-6" id="accordion">\n' +
+            $('#contenido').append('<div class="col-lg-6 col-sm-6 col-md-6"><img class="img-fluid" src="'+ detalle.Poster +'"></div>');
+
+            $('#contenido').append('<div class="col-lg-6 col-md-6 col-sm-6" id="accordion">\n' +
                 '  <div class="card">\n' +
                 '    <div class="card-header" id="headingOne">\n' +
                 '      <h5 class="mb-0">\n' +
@@ -151,10 +154,9 @@ function buscarDetalle(idPelicula) {
                 '    </div>\n' +
                 '  </div>\n' +
                 '</div>');
+            $('#contenido').append('</div>');
 
-            $('#contenido').append('<img style="display: inline-block;" class="col-6" src="'+ detalle.Poster +'"></div>')
-
-            $('#contenido').append('<hr><a class="btn btn-warning col-6 offset-3" onclick="llevarInicio()">Volver al inicio</a>')
+            $('#contenido').append('<hr><div class="row"><a class="btn btn-warning col-6 offset-3" onclick="llevarInicio()">Volver al inicio</a></div>')
         },
         error: function (nodetalle) {
             console.log('Error desde el detalle', detalle);
