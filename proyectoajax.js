@@ -80,10 +80,16 @@ function buscarDetalle(idPelicula) {
     $.ajax({
         url: "http://www.omdbapi.com/?i=" + idPelicula + "&plot=full&apikey=31b14819",
         success: function (detalle) {
+            for (let i = 0; i < detalle.Ratings.length; i++) {
+                console.log(detalle.Ratings[i]);
+            }
+            peliculaBuscada = '';
             $('#inputPelicula').val(null);
             $('#contenido').empty();
 
-            $('#contenido').append('<div class="col-lg-6 col-md-6 col-sm-6" id="accordion">\n' +
+            /*----- Descripción -----*/
+
+            $('#contenido').append('<div><div class="col-lg-6 col-md-6 col-sm-6" id="accordion">\n' +
                 '  <div class="card">\n' +
                 '    <div class="card-header" id="headingOne">\n' +
                 '      <h5 class="mb-0">\n' +
@@ -99,37 +105,56 @@ function buscarDetalle(idPelicula) {
                 '      </div>\n' +
                 '    </div>\n' +
                 '  </div>\n' +
+
+                /*----- Información -----*/
+
+                '  <div class="card">\n' +
+                '    <div class="card-header" id="headingInfo">\n' +
+                '      <h5 class="mb-0">\n' +
+                '        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseInfo" aria-controls="collapseInfo">\n' +
+                '          Información de la película: \n' +
+                '        </button>\n' +
+                '      </h5>\n' +
+                '    </div>\n' +
+                '\n' +
+                '    <div id="collapseInfo" class="collapse" data-toggle="collapse" aria-labelledby="headingInfo" data-parent="#accordion">\n' +
+                '      <div class="card-body">\n' +
+                '        <p>Año: ' + detalle.Year + '</p>\n' +
+                '<p>Duración: ' + detalle.Runtime + '</p>\n' +
+                '<p>Director: ' + detalle.Director + '</p>\n' +
+                '<p>Idioma: ' + detalle.Language + '</p>\n' +
+                '<p>Género: ' + detalle.Genre + '</p>\n' +
+                '<p>Actores : ' + detalle.Actors + '</p>\n' +
+                '<p>Fecha: ' + detalle.Released + '</p>\n' +
+                '<p>Premios: ' + detalle.Awards + '</p>\n' +
+                '<p>Éxito en taquilla: ' + detalle.BoxOffice + '</p>\n' +
+                '      </div>\n' +
+                '    </div>\n' +
+                '  </div>\n' +
+
+                /*----- Valoraciones -----*/
+
                 '  <div class="card">\n' +
                 '    <div class="card-header" id="headingTwo">\n' +
                 '      <h5 class="mb-0">\n' +
                 '        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">\n' +
-                '          Collapsible Group Item #2\n' +
+                '          Valoraciones\n' +
                 '        </button>\n' +
                 '      </h5>\n' +
                 '    </div>\n' +
                 '    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">\n' +
-                '      <div class="card-body">\n' +
-                '        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.\n' +
-                '      </div>\n' +
-                '    </div>\n' +
-                '  </div>\n' +
-                '  <div class="card">\n' +
-                '    <div class="card-header" id="headingThree">\n' +
-                '      <h5 class="mb-0">\n' +
-                '        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">\n' +
-                '          Collapsible Group Item #3\n' +
-                '        </button>\n' +
-                '      </h5>\n' +
-                '    </div>\n' +
-                '    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">\n' +
-                '      <div class="card-body">\n' +
-                '        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.\n' +
-                '      </div>\n' +
+                '      <div class="card-body">');
+            for (let i = 0; i < detalle.Ratings.length; i++) {
+                $('#collapseTwo').append('<p>Fuente: ' + detalle.Ratings[i].Source + '</p><p>Valoración: ' + detalle.Ratings[i].Value + '</p><hr>\n')
+            }
+            $('#contenido').append('</div>\n' +
                 '    </div>\n' +
                 '  </div>\n' +
                 '</div>');
+
+            $('#contenido').append('<img style="display: inline-block;" class="col-6" src="'+ detalle.Poster +'"></div>')
+
             $('#contenido').append('<hr><a class="btn btn-warning col-6 offset-3" onclick="llevarInicio()">Volver al inicio</a>')
-            console.log('Este es el detalle', detalle)
         },
         error: function (nodetalle) {
             console.log('Error desde el detalle', detalle);
