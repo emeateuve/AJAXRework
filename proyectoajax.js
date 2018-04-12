@@ -2,7 +2,8 @@ var win = $(window);
 var hayPeticion = true;
 var hayTitulo = false;
 var contadorPagina = 1;
-var peliculaBuscada = ''
+var peliculaBuscada = '';
+var imagenCargando = $('<img src="./img/loading.gif">');
 
 // var noDisponible = $('<img src="./img/notavailable.jpg"/>');
 
@@ -10,6 +11,7 @@ function llevarInicio() {
     peliculaBuscada = ''
     $('#inputPelicula').val(null);
     $('#contenido').empty();
+    $('#contenido').append(imagenCargando.css('display','none'));
     $('#contenido').append('<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">\n' +
         '        <ol class="carousel-indicators">\n' +
         '            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>\n' +
@@ -45,19 +47,23 @@ function buscarPelicula() {
         $('#contenido').empty();
         peliculaBuscada = $('#inputPelicula').val();
         contadorPagina = 1;
+        imagenCargando.css('display', 'block');
         $.ajax({
             url: "http://www.omdbapi.com/?s=" + peliculaBuscada + "&type=movie&apikey=31b14819",
             success: function (result) {
                 if (result.Response === 'True') {
                     hayTitulo = true;
+                    imagenCargando.css('display', 'none');
                     addPelicula(result);
 
                 } else {
                     noEncontrado(result, peliculaBuscada)
+                    imagenCargando.css('display', 'none');
                 }
             },
             error: function (result) {
                 noEncontrado(result, peliculaBuscada);
+                imagenCargando.css('display', 'none');
             }
         });
     });
@@ -74,9 +80,11 @@ function noEncontrado(nopelicula, nombre) {
 /*############## BUSCAR DETALLE DE PELICULA POR ID #######################*/
 
 function buscarDetalle(idPelicula) {
+    imagenCargando.css('display', 'block');
     $.ajax({
         url: "http://www.omdbapi.com/?i=" + idPelicula + "&plot=full&apikey=31b14819",
         success: function (detalle) {
+            imagenCargando.css('display', 'none');
             peliculaBuscada = '';
             $('#inputPelicula').val(null);
             $('#contenido').empty();
@@ -152,13 +160,14 @@ function buscarDetalle(idPelicula) {
             $('#contenido').append('<hr><div class="row"><a class="btn btn-warning col-6 offset-3" onclick="llevarInicio()">Volver al inicio</a></div>')
         },
         error: function (nodetalle) {
+            imagenCargando.css('display', 'none');
             noEncontrado(nodetalle)
         }
     })
 }
 
 function noCargada(pelicula) {
-    pelicula.src = "./img/notavailable.jpg"
+    pelicula.src = "./img/notavailable.jpg";
 }
 
 function addPelicula(pelicula) {
@@ -182,9 +191,11 @@ function addPelicula(pelicula) {
         if ($(document).height() - win.height() <= (win.scrollTop() + 80) && hayPeticion === true && peliculaBuscada != '') {
             contadorPagina++;
             hayPeticion = false;
+            imagenCargando.css('display', 'block');
             $.ajax({
                 url: "http://www.omdbapi.com/?s=" + peliculaBuscada + "&type=movie&page=" + contadorPagina + "&apikey=31b14819",
                 success: function (denuevo) {
+                    imagenCargando.css('display', 'none');
                     addPelicula(denuevo);
                     hayPeticion = true;
                 }
