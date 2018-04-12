@@ -44,7 +44,6 @@ function buscarPelicula() {
     $('#botonBuscar').click(function () {
         $('#contenido').empty();
         peliculaBuscada = $('#inputPelicula').val();
-        console.log('La palabra es: ', peliculaBuscada)
         contadorPagina = 1;
         $.ajax({
             url: "http://www.omdbapi.com/?s=" + peliculaBuscada + "&type=movie&apikey=31b14819",
@@ -60,9 +59,7 @@ function buscarPelicula() {
             error: function (result) {
                 noEncontrado(result, peliculaBuscada);
             }
-
         });
-        // $("#inputPelicula").val('');
     });
 
 
@@ -80,19 +77,14 @@ function buscarDetalle(idPelicula) {
     $.ajax({
         url: "http://www.omdbapi.com/?i=" + idPelicula + "&plot=full&apikey=31b14819",
         success: function (detalle) {
-            for (let i = 0; i < detalle.Ratings.length; i++) {
-                console.log(detalle.Ratings[i]);
-            }
             peliculaBuscada = '';
             $('#inputPelicula').val(null);
             $('#contenido').empty();
 
             /*----- Descripción -----*/
-            $('#contenido').append('<div class="row">');
-
-            $('#contenido').append('<div class="col-lg-6 col-sm-6 col-md-6"><img class="img-fluid" src="'+ detalle.Poster +'"></div>');
-
-            $('#contenido').append('<div class="col-lg-6 col-md-6 col-sm-6" id="accordion">\n' +
+            $('#contenido').append('<div class="row">\n' +
+                '<div class="col-lg-6 col-sm-6 col-md-6"><img style="float: left;height: 75vh;display: inline-block" class="img-fluid w-100" src="'+ detalle.Poster +'"></div>\n' +
+                '<div class="col-lg-6 col-md-6 col-sm-6" id="accordion">\n' +
                 '  <div class="card">\n' +
                 '    <div class="card-header" id="headingOne">\n' +
                 '      <h5 class="mb-0">\n' +
@@ -153,17 +145,16 @@ function buscarDetalle(idPelicula) {
             $('#contenido').append('</div>\n' +
                 '    </div>\n' +
                 '  </div>\n' +
-                '</div>');
+                '</div>\n' +
+            '</div>');
             $('#contenido').append('</div>');
 
             $('#contenido').append('<hr><div class="row"><a class="btn btn-warning col-6 offset-3" onclick="llevarInicio()">Volver al inicio</a></div>')
         },
         error: function (nodetalle) {
-            console.log('Error desde el detalle', detalle);
             noEncontrado(nodetalle)
         }
     })
-    console.log('ID de la película: ', idPelicula);
 }
 
 function noCargada(pelicula) {
@@ -171,8 +162,6 @@ function noCargada(pelicula) {
 }
 
 function addPelicula(pelicula) {
-    console.log('añade pelicula')
-    console.log(pelicula);
     // $('#contenido').empty();
     if (hayTitulo === true) {
         $('#contenido').append('<a style="text-align: center">Mostrando resultados para <h1 style="display:inline-block;">' + peliculaBuscada + '</h1></a><hr>');
